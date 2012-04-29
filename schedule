@@ -1,0 +1,7 @@
+#!/usr/bin/python
+
+import argparse
+
+parser = argparse.ArgumentParser(description="Schedule task(s) for today from the activity inventory.")
+parser.add_argument("tasks", metavar="TASK_ID", nargs="*", type=str, help="tasks to schedule for today")
+args = parser.parse_args()
