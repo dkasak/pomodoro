@@ -1,0 +1,6 @@
+#!/usr/bin/python
+
+from os import popen
+from sys import argv
+
+print(popen("/usr/bin/t --task-dir ~/docs/tasks --list tasks " + "".join(argv[1:])).read())
