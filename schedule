@@ -15,6 +15,10 @@ parser.add_argument("-v", "--verbose",
                     dest="verbose", action="store_const", 
                     default="", const="--verbose",
                     help="print more detailed output")
+parser.add_argument("-q", "--quiet", 
+                    dest="verbose", action="store_const", 
+                    default="", const="--quiet",
+                    help="print less detailed output")
 parser.add_argument("-r", "--remove", 
                     nargs=1, dest="remove", action="store", 
                     help="remove TASK from the todo list", metavar="TASK")
