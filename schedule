@@ -8,8 +8,16 @@ TASK_DIR = os.path.expanduser("~/docs/tasks/")
 INVENTORY_FILE = "tasks"
 
 parser = argparse.ArgumentParser(description="Schedule task(s) for today from the activity inventory.")
-parser.add_argument("tasks", metavar="TASK_ID", nargs="*", type=str, help="tasks to schedule for today")
-parser.add_argument("-v", "--verbose", const="--verbose", default="", dest="verbose", action="store_const", help="print more detailed output")
+parser.add_argument("tasks", 
+                    nargs="*", 
+                    help="tasks to schedule for today", metavar="TASK")
+parser.add_argument("-v", "--verbose", 
+                    dest="verbose", action="store_const", 
+                    default="", const="--verbose",
+                    help="print more detailed output")
+parser.add_argument("-r", "--remove", 
+                    nargs=1, dest="remove", action="store", 
+                    help="remove TASK from the todo list", metavar="TASK")
 args = parser.parse_args()
 
 today = datetime.date.today()
@@ -20,14 +28,17 @@ if not os.path.exists(path):
     with open(path, "w"):
         pass
 
-if not args.tasks:
-    output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', filename, args.verbose]).decode('ascii')
-    print(output)
-else:
+if args.remove:
+    task = args.remove[0]
+    subprocess.call(['t', '--task-dir', TASK_DIR, '--list', filename, '-r', task])
+elif args.tasks:
     output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', INVENTORY_FILE, "--verbose"]).decode('ascii')
     for task in output.split('\n'):
         parts = task.partition('-')
         id, text = parts[0].strip(), parts[2].strip()
         if True in map(id.startswith, args.tasks):
             subprocess.call(['t', '--task-dir', TASK_DIR, '--list', filename, text])
+else:
+    output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', filename, args.verbose]).decode('ascii')
+    print(output)
 
