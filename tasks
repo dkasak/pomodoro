@@ -1,6 +1,55 @@
 #!/usr/bin/python
 
-from os import popen
-from sys import argv
+import os
+import subprocess
+import argparse
 
-print(popen("/usr/bin/t --task-dir ~/docs/tasks --list tasks " + "".join(argv[1:])).read())
+class StoreBoth(argparse.Action):
+   """
+   Stores both the option and the value to the destination.
+   """
+   def __call__(self, parser, namespace, values, option_string=None):
+       setattr(namespace, self.dest, [option_string, values[0]])
+
+TASK_DIR = os.path.expanduser("~/docs/tasks/")
+INVENTORY_FILE = "tasks"
+
+def t(task_directory, task_file, *options):
+    arguments = ['t', '--task-dir', task_directory, '--list', task_file]
+    arguments.extend(options)
+    output = subprocess.check_output(arguments).decode('ascii')
+    return output
+
+def build_parser():
+    parser = argparse.ArgumentParser(description="Manage activity inventory.")
+    parser.add_argument("text", 
+                        nargs="*", 
+                        help="task description", metavar="TEXT")
+    parser.add_argument("-v", "--verbose", 
+                        dest="verbosity", action="store_const", 
+                        default="", const="--verbose",
+                        help="print more detailed output")
+    parser.add_argument("-q", "--quiet", 
+                        dest="verbosity", action="store_const", 
+                        default="", const="--quiet",
+                        help="print less detailed output")
+    parser.add_argument("-r", "--remove", 
+                        nargs=1, dest="remove", action=StoreBoth, 
+                        help="remove TASK from the activity inventory", metavar="TASK")
+    parser.add_argument("-g", "--grep", 
+                        nargs=1, dest="grep", action=StoreBoth, 
+                        default="",
+                        help="print only tasks that contain WORD", metavar="WORD")
+    return parser
+
+if __name__ == "__main__":
+    args = build_parser().parse_args()
+
+    if args.remove:
+        t(TASK_DIR, INVENTORY_FILE, *args.remove)
+    elif args.text:
+        output = t(TASK_DIR, INVENTORY_FILE, *args.text)
+    else:
+        output = t(TASK_DIR, INVENTORY_FILE, args.verbosity, *args.grep)
+        print(output, end="")
+
