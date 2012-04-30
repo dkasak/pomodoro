@@ -12,11 +12,11 @@ parser.add_argument("tasks",
                     nargs="*", 
                     help="tasks to schedule for today", metavar="TASK")
 parser.add_argument("-v", "--verbose", 
-                    dest="verbose", action="store_const", 
+                    dest="verbosity", action="store_const", 
                     default="", const="--verbose",
                     help="print more detailed output")
 parser.add_argument("-q", "--quiet", 
-                    dest="verbose", action="store_const", 
+                    dest="verbosity", action="store_const", 
                     default="", const="--quiet",
                     help="print less detailed output")
 parser.add_argument("-r", "--remove", 
@@ -43,6 +43,6 @@ elif args.tasks:
         if True in map(id.startswith, args.tasks):
             subprocess.call(['t', '--task-dir', TASK_DIR, '--list', filename, text])
 else:
-    output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', filename, args.verbose]).decode('ascii')
+    output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', filename, args.verbosity]).decode('ascii')
     print(output)
 
