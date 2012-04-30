@@ -14,46 +14,50 @@ class StoreBoth(argparse.Action):
 TASK_DIR = os.path.expanduser("~/docs/tasks/")
 INVENTORY_FILE = "tasks"
 
-parser = argparse.ArgumentParser(description="Schedule task(s) for today from the activity inventory.")
-parser.add_argument("tasks", 
-                    nargs="*", 
-                    help="tasks to schedule for today", metavar="TASK")
-parser.add_argument("-v", "--verbose", 
-                    dest="verbosity", action="store_const", 
-                    default="", const="--verbose",
-                    help="print more detailed output")
-parser.add_argument("-q", "--quiet", 
-                    dest="verbosity", action="store_const", 
-                    default="", const="--quiet",
-                    help="print less detailed output")
-parser.add_argument("-r", "--remove", 
-                    nargs=1, dest="remove", action="store", 
-                    help="remove TASK from the todo list", metavar="TASK")
-parser.add_argument("-g", "--grep", 
-                    nargs=1, dest="grep", action=StoreBoth, 
-                    default="",
-                    help="print only tasks that contain WORD", metavar="WORD")
-args = parser.parse_args()
+def build_parser():
+    parser = argparse.ArgumentParser(description="Schedule task(s) for today from the activity inventory.")
+    parser.add_argument("tasks", 
+                        nargs="*", 
+                        help="tasks to schedule for today", metavar="TASK")
+    parser.add_argument("-v", "--verbose", 
+                        dest="verbosity", action="store_const", 
+                        default="", const="--verbose",
+                        help="print more detailed output")
+    parser.add_argument("-q", "--quiet", 
+                        dest="verbosity", action="store_const", 
+                        default="", const="--quiet",
+                        help="print less detailed output")
+    parser.add_argument("-r", "--remove", 
+                        nargs=1, dest="remove", action="store", 
+                        help="remove TASK from the todo list", metavar="TASK")
+    parser.add_argument("-g", "--grep", 
+                        nargs=1, dest="grep", action=StoreBoth, 
+                        default="",
+                        help="print only tasks that contain WORD", metavar="WORD")
+    return parser
 
-today = datetime.date.today()
-filename = "todo-{}".format(str(today))
-path = os.path.expanduser(TASK_DIR + filename)
+if __name__ == "__main__":
+    args = build_parser().parse_args()
 
-if not os.path.exists(path):
-    with open(path, "w"):
-        pass
+    today = datetime.date.today()
+    filename = "todo-{}".format(str(today))
+    path = os.path.expanduser(TASK_DIR + filename)
 
-if args.remove:
-    task = args.remove[0]
-    subprocess.call(['t', '--task-dir', TASK_DIR, '--list', filename, '-r', task])
-elif args.tasks:
-    output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', INVENTORY_FILE, "--verbose"]).decode('ascii')
-    for task in output.split('\n'):
-        parts = task.partition('-')
-        id, text = parts[0].strip(), parts[2].strip()
-        if True in map(id.startswith, args.tasks):
-            subprocess.call(['t', '--task-dir', TASK_DIR, '--list', filename, text])
-else:
-    output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', filename, args.verbosity]).decode('ascii')
-    print(output)
+    if not os.path.exists(path):
+        with open(path, "w"):
+            pass
+
+    if args.remove:
+        task = args.remove[0]
+        subprocess.call(['t', '--task-dir', TASK_DIR, '--list', filename, '-r', task])
+    elif args.tasks:
+        output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', INVENTORY_FILE, "--verbose"]).decode('ascii')
+        for task in output.split('\n'):
+            parts = task.partition('-')
+            id, text = parts[0].strip(), parts[2].strip()
+            if True in map(id.startswith, args.tasks):
+                subprocess.call(['t', '--task-dir', TASK_DIR, '--list', filename, text])
+    else:
+        output = subprocess.check_output(['t', '--task-dir', TASK_DIR, '--list', filename, args.verbosity]).decode('ascii')
+        print(output)
 
