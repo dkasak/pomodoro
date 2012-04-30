@@ -63,6 +63,6 @@ if __name__ == "__main__":
             if True in map(id.startswith, args.tasks):
                 t(TASK_DIR, filename, text)
     else:
-        output = t(TASK_DIR, filename, args.verbosity)
+        output = t(TASK_DIR, filename, args.verbosity, *args.grep)
         print(output)
 
