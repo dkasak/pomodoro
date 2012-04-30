@@ -4,6 +4,13 @@ import datetime
 import os
 import subprocess
 
+class StoreBoth(argparse.Action):
+   """
+   Stores both the option and the value to the destination.
+   """
+   def __call__(self, parser, namespace, values, option_string=None):
+       setattr(namespace, self.dest, [option_string, values[0]])
+
 TASK_DIR = os.path.expanduser("~/docs/tasks/")
 INVENTORY_FILE = "tasks"
 
@@ -22,6 +29,10 @@ parser.add_argument("-q", "--quiet",
 parser.add_argument("-r", "--remove", 
                     nargs=1, dest="remove", action="store", 
                     help="remove TASK from the todo list", metavar="TASK")
+parser.add_argument("-g", "--grep", 
+                    nargs=1, dest="grep", action=StoreBoth, 
+                    default="",
+                    help="print only tasks that contain WORD", metavar="WORD")
 args = parser.parse_args()
 
 today = datetime.date.today()
