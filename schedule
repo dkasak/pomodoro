@@ -3,22 +3,10 @@ import argparse
 import datetime
 import os
 import subprocess
-
-class StoreBoth(argparse.Action):
-   """
-   Stores both the option and the value to the destination.
-   """
-   def __call__(self, parser, namespace, values, option_string=None):
-       setattr(namespace, self.dest, [option_string, values[0]])
+from libpomodoro import StoreBoth, t
 
 TASK_DIR = os.path.expanduser("~/docs/tasks/")
 INVENTORY_FILE = "tasks"
-
-def t(task_directory, task_file, *options):
-    arguments = ['t', '--task-dir', task_directory, '--list', task_file]
-    arguments.extend(options)
-    output = subprocess.check_output(arguments).decode('ascii')
-    return output
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Schedule task(s) for today from the activity inventory.")
