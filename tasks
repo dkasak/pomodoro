@@ -12,14 +12,6 @@ def build_parser():
     parser = argparse.ArgumentParser(description="Manage activity inventory.")
     parser.add_argument("text", 
                         help="description of the task to add", metavar="TEXT")
-    parser.add_argument("-v", "--verbose", 
-                        dest="verbosity", action="store_const", 
-                        default="", const="--verbose",
-                        help="print more detailed output")
-    parser.add_argument("-q", "--quiet", 
-                        dest="verbosity", action="store_const", 
-                        default="", const="--quiet",
-                        help="print less detailed output")
     parser.add_argument("-r", "--remove", 
                         nargs=1, dest="remove", action=StoreBoth, 
                         help="remove TASK from the activity inventory", metavar="TASK")
@@ -30,6 +22,14 @@ def build_parser():
                         nargs=1, dest="grep", action=StoreBoth, 
                         default="",
                         help="print only tasks that contain WORD", metavar="WORD")
+    parser.add_argument("-v", "--verbose", 
+                        dest="verbosity", action="store_const", 
+                        default="", const="--verbose",
+                        help="print more detailed output")
+    parser.add_argument("-q", "--quiet", 
+                        dest="verbosity", action="store_const", 
+                        default="", const="--quiet",
+                        help="print less detailed output")
     return parser
 
 if __name__ == "__main__":

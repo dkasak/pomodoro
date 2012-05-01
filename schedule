@@ -13,6 +13,13 @@ def build_parser():
     parser.add_argument("tasks", 
                         nargs="*", 
                         help="tasks to schedule for today", metavar="TASK")
+    parser.add_argument("-r", "--remove", 
+                        nargs=1, dest="remove", action=StoreBoth, 
+                        help="remove TASK from the todo list", metavar="TASK")
+    parser.add_argument("-g", "--grep", 
+                        nargs=1, dest="grep", action=StoreBoth, 
+                        default="",
+                        help="print only tasks that contain WORD", metavar="WORD")
     parser.add_argument("-v", "--verbose", 
                         dest="verbosity", action="store_const", 
                         default="", const="--verbose",
@@ -21,13 +28,6 @@ def build_parser():
                         dest="verbosity", action="store_const", 
                         default="", const="--quiet",
                         help="print less detailed output")
-    parser.add_argument("-r", "--remove", 
-                        nargs=1, dest="remove", action=StoreBoth, 
-                        help="remove TASK from the todo list", metavar="TASK")
-    parser.add_argument("-g", "--grep", 
-                        nargs=1, dest="grep", action=StoreBoth, 
-                        default="",
-                        help="print only tasks that contain WORD", metavar="WORD")
     return parser
 
 if __name__ == "__main__":
