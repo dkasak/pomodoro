@@ -6,7 +6,7 @@ class StoreBoth(argparse.Action):
    Stores both the option and the value to the destination.
    """
    def __call__(self, parser, namespace, values, option_string=None):
-       setattr(namespace, self.dest, [option_string, values[0]])
+       setattr(namespace, self.dest, [option_string] + values)
 
 class AppendBoth(argparse.Action):
    """
