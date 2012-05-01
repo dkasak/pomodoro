@@ -11,6 +11,7 @@ INVENTORY_FILE = "tasks"
 def build_parser():
     parser = argparse.ArgumentParser(description="Manage activity inventory.")
     parser.add_argument("text",
+                        nargs="?",
                         help="description of the task to add", metavar="TEXT")
     parser.add_argument("-r", "--remove",
                         nargs=1, dest="remove", action=StoreBoth,
