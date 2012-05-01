@@ -24,3 +24,10 @@ def t(task_directory, task_file, *options):
     output = subprocess.check_output(arguments).decode('ascii')
     return output
 
+def find_task_by_text(task_directory, task_file, text):
+    output = t(task_directory, task_file)
+    for line in output.split("\n"):
+        id, _, desc = line.partition('|')
+        if desc == text:
+            return id
+    return None
