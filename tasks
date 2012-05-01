@@ -11,8 +11,7 @@ INVENTORY_FILE = "tasks"
 def build_parser():
     parser = argparse.ArgumentParser(description="Manage activity inventory.")
     parser.add_argument("text", 
-                        nargs="*", 
-                        help="task description", metavar="TEXT")
+                        help="description of the task to add", metavar="TEXT")
     parser.add_argument("-v", "--verbose", 
                         dest="verbosity", action="store_const", 
                         default="", const="--verbose",
