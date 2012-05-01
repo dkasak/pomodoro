@@ -10,24 +10,24 @@ INVENTORY_FILE = "tasks"
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Manage activity inventory.")
-    parser.add_argument("text", 
+    parser.add_argument("text",
                         help="description of the task to add", metavar="TEXT")
-    parser.add_argument("-r", "--remove", 
-                        nargs=1, dest="remove", action=StoreBoth, 
+    parser.add_argument("-r", "--remove",
+                        nargs=1, dest="remove", action=StoreBoth,
                         help="remove TASK from the activity inventory", metavar="TASK")
-    parser.add_argument("-e", "--edit", 
-                        nargs=2, dest="edit", action=StoreBoth, 
+    parser.add_argument("-e", "--edit",
+                        nargs=2, dest="edit", action=StoreBoth,
                         help="edit TASK to contain TEXT (recalculates the hash)", metavar=("TASK", "TEXT"))
-    parser.add_argument("-g", "--grep", 
-                        nargs=1, dest="grep", action=StoreBoth, 
+    parser.add_argument("-g", "--grep",
+                        nargs=1, dest="grep", action=StoreBoth,
                         default="",
                         help="print only tasks that contain WORD", metavar="WORD")
-    parser.add_argument("-v", "--verbose", 
-                        dest="verbosity", action="store_const", 
+    parser.add_argument("-v", "--verbose",
+                        dest="verbosity", action="store_const",
                         default="", const="--verbose",
                         help="print more detailed output")
-    parser.add_argument("-q", "--quiet", 
-                        dest="verbosity", action="store_const", 
+    parser.add_argument("-q", "--quiet",
+                        dest="verbosity", action="store_const",
                         default="", const="--quiet",
                         help="print less detailed output")
     return parser
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     if args.remove:
         t(TASK_DIR, INVENTORY_FILE, *args.remove)
     elif args.edit:
-        option, task, text = args.edit 
+        option, task, text = args.edit
         print(task)
         # first delete the old task, so the hash gets recalculated
         t(TASK_DIR, INVENTORY_FILE, "-r", task)
