@@ -1,0 +1,37 @@
+#!/usr/bin/python
+
+# Recreates the t task file whose filename is passed as the first command line argument.
+# This recalculates all the hashes so each task entry has the proper hash, even if it was 
+# previously edited.
+# The script will create a new file (with the extension .new) in the current directory
+# instead of overwriting the old one.
+
+import subprocess
+import sys
+import os
+
+if len(sys.argv) != 2:
+    print("Usage: {} TASK_FILE".format(sys.argv[0]))
+    exit(1)
+
+with open(sys.argv[1], 'r') as f:
+    for line in f:
+        text, _, id = line.partition('|')
+        text = text.strip()
+        id = id.strip()
+        subprocess.call(['t', '--task-dir', os.getcwd(), '--list', sys.argv[1] + '.new', text]) 
+        with open(sys.argv[1] + '.new', 'r') as nf:
+            for line in nf:
+                tmp, _, newid = line.partition('|')
+                tmp = tmp.strip()
+                newid = newid.strip()
+                if text == tmp and id != newid:
+                    print(text, id, newid)
+
+# ensure that the files contain the same number of lines
+check = subprocess.check_output
+lines1, filename = check(['wc', '-l', sys.argv[1]]).split()
+lines2, filename = check(['wc', '-l', sys.argv[1] + '.new']).split()
+
+assert lines1 == lines2  
+
