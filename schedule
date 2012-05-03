@@ -44,7 +44,7 @@ if __name__ == "__main__":
     if args.remove:
         t(TASK_DIR, filename, *args.remove)
     elif args.tasks:
-        output = t(TASK_DIR, INVENTORY_FILE, "--verbose")
+        output = t(TASK_DIR, INVENTORY_FILE, verbose=True)
         for task in output.split('\n'):
             parts = task.partition('-')
             id, text = parts[0].strip(), parts[2].strip()
