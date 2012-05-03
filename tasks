@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
 import os
+import sys
 import subprocess
 import argparse
-from libpomodoro import StoreBoth, t
 
-TASK_DIR = os.path.expanduser("~/docs/tasks/")
-INVENTORY_FILE = "tasks"
+sys.path.append(os.getcwd() + os.sep + 't')
+import t
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Manage activity inventory.")
@@ -20,33 +20,39 @@ def build_parser():
                         nargs=2, dest="edit", action=StoreBoth,
                         help="edit TASK to contain TEXT (recalculates the hash)", metavar=("TASK", "TEXT"))
     parser.add_argument("-g", "--grep",
-                        nargs=1, dest="grep", action=StoreBoth,
+                        nargs=1, dest="grep", action="store",
                         default="",
                         help="print only tasks that contain WORD", metavar="WORD")
     parser.add_argument("-v", "--verbose",
-                        dest="verbosity", action="store_const",
-                        default="", const="--verbose",
+                        dest="verbose", action="store_const",
+                        default=False, const=True,
                         help="print more detailed output")
     parser.add_argument("-q", "--quiet",
-                        dest="verbosity", action="store_const",
-                        default="", const="--quiet",
+                        dest="quiet", action="store_const",
+                        default=False, const=False,
                         help="print less detailed output")
     return parser
 
 if __name__ == "__main__":
+    TASK_DIR = os.path.expanduser("~/docs/tasks/")
+    INVENTORY_FILE = "tasks"
     args = build_parser().parse_args()
 
+    inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
+
     if args.remove:
-        t(TASK_DIR, INVENTORY_FILE, *args.remove)
+        inventory.remove_task(args.remove[1])
+        inventory.write()
     elif args.edit:
         option, task, text = args.edit
         # first delete the old task, so the hash gets recalculated
-        t(TASK_DIR, INVENTORY_FILE, "-r", task)
+        inventory.remove_task(task)
         # add the new task
-        t(TASK_DIR, INVENTORY_FILE, text)
+        inventory.add_task(text)
+        inventory.write()
     elif args.text:
-        output = t(TASK_DIR, INVENTORY_FILE, args.text)
+        inventory.add_task(args.text)
+        inventory.write()
     else:
-        output = t(TASK_DIR, INVENTORY_FILE, args.verbosity, *args.grep)
-        print(output, end="")
+        inventory.print_list(verbose=args.verbose, quiet=args.quiet, grep=args.grep)
 
