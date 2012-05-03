@@ -40,13 +40,12 @@ if __name__ == "__main__":
         t(TASK_DIR, INVENTORY_FILE, *args.remove)
     elif args.edit:
         option, task, text = args.edit
-        print(task)
         # first delete the old task, so the hash gets recalculated
         t(TASK_DIR, INVENTORY_FILE, "-r", task)
         # add the new task
         t(TASK_DIR, INVENTORY_FILE, text)
     elif args.text:
-        output = t(TASK_DIR, INVENTORY_FILE, *args.text)
+        output = t(TASK_DIR, INVENTORY_FILE, args.text)
     else:
         output = t(TASK_DIR, INVENTORY_FILE, args.verbosity, *args.grep)
         print(output, end="")
