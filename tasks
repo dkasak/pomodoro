@@ -46,10 +46,12 @@ if __name__ == "__main__":
         inventory.write()
     elif args.edit:
         task_id, text = args.edit
-        # first delete the old task, so the hash gets recalculated
+        # edit the task
+        inventory.edit_task(task_id, text)
+        # then remove and re-add it again so the hash gets recalculated
+        task = inventory[task_id]
         inventory.remove_task(task_id)
-        # add the new task
-        inventory.add_task(text)
+        inventory.add_task(task['text'])
         inventory.write()
     elif args.text:
         inventory.add_task(args.text)
