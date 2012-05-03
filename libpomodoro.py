@@ -26,6 +26,25 @@ def t(task_directory, task_file, *options, verbose=False):
     output = subprocess.check_output(arguments).decode('ascii')
     return output
 
+def get_task_text(task_directory, task_file, id):
+    output = t(task_directory, task_file)
+    for line in output.split("\n"):
+        tid, _, text = line.partition('-')
+        tid = tid.strip()
+        if id == tid:
+            return text.strip()
+    return None
+
+def get_full_id(task_directory, task_file, id):
+    output = t(task_directory, task_file, verbose=True)
+    print(output)
+    for line in output.split("\n"):
+        full_id, _, text = line.partition('-')
+        full_id = full_id.strip()
+        if full_id.startswith(id):
+            return full_id
+    return None
+
 def find_task_by_text(task_directory, task_file, text):
     output = t(task_directory, task_file)
     for line in output.split("\n"):
