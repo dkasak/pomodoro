@@ -14,10 +14,10 @@ def build_parser():
                         nargs="?",
                         help="description of the task to add", metavar="TEXT")
     parser.add_argument("-r", "--remove",
-                        nargs=1, dest="remove", action=StoreBoth,
+                        nargs=1, dest="remove", action="store",
                         help="remove TASK from the activity inventory", metavar="TASK")
     parser.add_argument("-e", "--edit",
-                        nargs=2, dest="edit", action=StoreBoth,
+                        nargs=2, dest="edit", action="store",
                         help="edit TASK to contain TEXT (recalculates the hash)", metavar=("TASK", "TEXT"))
     parser.add_argument("-g", "--grep",
                         nargs=1, dest="grep", action="store",
@@ -41,12 +41,13 @@ if __name__ == "__main__":
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
 
     if args.remove:
-        inventory.remove_task(args.remove[1])
+        task_id = args.remove[0]
+        inventory.remove_task(task_id)
         inventory.write()
     elif args.edit:
-        option, task, text = args.edit
+        task_id, text = args.edit
         # first delete the old task, so the hash gets recalculated
-        inventory.remove_task(task)
+        inventory.remove_task(task_id)
         # add the new task
         inventory.add_task(text)
         inventory.write()
