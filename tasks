@@ -46,18 +46,28 @@ if __name__ == "__main__":
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
 
     if args.remove:
-        task_id = args.remove[0]
-        inventory.remove_task(task_id)
-        inventory.write()
+        try:
+            task_id = args.remove[0]
+            inventory.remove_task(task_id)
+            inventory.write()
+        except t.AmbiguousPrefix as e:
+            print("Skipping '{}', ambiguous prefix in inventory.".format(e.prefix))
+        except t.UnknownPrefix as e:
+            print("Skipping '{}', no such task in inventory.".format(e.prefix))
     elif args.edit:
-        task_id, text = args.edit
-        # edit the task
-        inventory.edit_task(task_id, text)
-        # then remove and re-add it again so the hash gets recalculated
-        task = inventory[task_id]
-        inventory.remove_task(task_id)
-        inventory.add_task(task['text'])
-        inventory.write()
+        try:
+            task_id, text = args.edit
+            # edit the task
+            inventory.edit_task(task_id, text)
+            # then remove and re-add it again so the hash gets recalculated
+            task = inventory[task_id]
+            inventory.remove_task(task_id)
+            inventory.add_task(task['text'])
+            inventory.write()
+        except t.AmbiguousPrefix as e:
+            print("Skipping '{}', ambiguous prefix in inventory.".format(e.prefix))
+        except t.UnknownPrefix as e:
+            print("Skipping '{}', no such task in inventory.".format(e.prefix))
     elif args.text:
         inventory.add_task(args.text)
         inventory.write()
