@@ -10,23 +10,20 @@ import subprocess
 import sys
 import os
 
+home = os.path.expanduser("~")
+sys.path.append(home + os.sep + "bin")
+import t
+
 if len(sys.argv) != 2:
     print("Usage: {} TASK_FILE".format(sys.argv[0]))
     exit(1)
 
-with open(sys.argv[1], 'r') as f:
-    for line in f:
-        text, _, id = line.partition('|')
-        text = text.strip()
-        id = id.strip()
-        subprocess.call(['t', '--task-dir', os.getcwd(), '--list', sys.argv[1] + '.new', text]) 
-        with open(sys.argv[1] + '.new', 'r') as nf:
-            for line in nf:
-                tmp, _, newid = line.partition('|')
-                tmp = tmp.strip()
-                newid = newid.strip()
-                if text == tmp and id != newid:
-                    print(text, id, newid)
+old = t.TaskDict(os.getcwd(), sys.argv[1])
+new = t.TaskDict(os.getcwd(), sys.argv[1] + ".new")
+for task in old.tasks.values():
+    task['id'] = t._hash(task['text'])
+    new.tasks[task['id']] = task
+new.write()
 
 # ensure that the files contain the same number of lines
 check = subprocess.check_output
