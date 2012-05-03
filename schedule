@@ -21,12 +21,12 @@ def build_parser():
                         default="",
                         help="print only tasks that contain WORD", metavar="WORD")
     parser.add_argument("-v", "--verbose",
-                        dest="verbose", action="store_const",
-                        default=False, const=True,
+                        dest="verbose", action="store_true",
+                        default=False,
                         help="print more detailed output")
     parser.add_argument("-q", "--quiet",
-                        dest="quiet", action="store_const",
-                        default=False, const=True,
+                        dest="quiet", action="store_true",
+                        default=False,
                         help="print less detailed output")
     return parser
 
