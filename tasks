@@ -31,6 +31,10 @@ def build_parser():
                         dest="quiet", action="store_const",
                         default=False, const=False,
                         help="print less detailed output")
+    parser.add_argument("--done",
+                        dest="done", action="store_const",
+                        default=False, const=True,
+                        help="print completed tasks")
     return parser
 
 if __name__ == "__main__":
@@ -57,5 +61,7 @@ if __name__ == "__main__":
         inventory.add_task(args.text)
         inventory.write()
     else:
-        inventory.print_list(verbose=args.verbose, quiet=args.quiet, grep=args.grep)
+        kind = 'tasks' if not args.done else 'done'
+        inventory.print_list(kind=kind, verbose=args.verbose, quiet=args.quiet, grep=args.grep)
+
 
