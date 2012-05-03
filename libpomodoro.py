@@ -18,9 +18,11 @@ class AppendBoth(argparse.Action):
            setattr(namespace, self.dest, [])
            getattr(namespace, self.dest).append("{} {}".format(option_string, str(values)))
 
-def t(task_directory, task_file, *options):
+def t(task_directory, task_file, *options, verbose=False):
     arguments = ['t', '--task-dir', task_directory, '--list', task_file]
     arguments.extend(options)
+    if verbose:
+        arguments.append('--verbose')
     output = subprocess.check_output(arguments).decode('ascii')
     return output
 
