@@ -1,6 +1,4 @@
 #!/bin/bash
-binaries=(schedule tasks recreate_tasklist)
-cd ~/bin/
-rm ${binaries[@]}
-cd ~/code/pomodoro
-ln -r -s ${binaries[@]} ~/bin/
+binaries=(schedule tasks recreate_tasklist t/t.py)
+code_dir=~/code/pomodoro
+ln -r -s --force $code_dir/${binaries[@]} ~/bin/
