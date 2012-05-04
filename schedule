@@ -3,7 +3,6 @@ import argparse
 import datetime
 import os
 import sys
-import subprocess
 
 home = os.path.expanduser("~")
 sys.path.append(home + os.sep + "bin")
