@@ -1,1 +1,45 @@
 #!/usr/bin/python
+import os
+import sys
+import argparse
+import datetime
+
+home = os.path.expanduser("~")
+sys.path.append(home + os.sep + "bin")
+import t
+
+def build_parser():
+    parser = argparse.ArgumentParser(description="Control the pomodoro.")
+    parser.add_argument("task",
+                        nargs="?",
+                        help="task to start the pomodoro for", metavar="TASK")
+    return parser
+
+if __name__ == "__main__":
+    TASK_DIR = os.path.expanduser("~/docs/tasks/")
+    args = build_parser().parse_args()
+
+    today = datetime.date.today()
+    filename = "todo-{}".format(str(today))
+
+    todo = t.TaskDict(TASK_DIR, filename)
+
+    if args.task:
+        if len(todo.tasks) == 0:
+            print("There are no tasks scheduled for today!")
+            exit(0)
+
+        task_id = todo[args.task]['id']
+        with open(os.path.expanduser("~/docs/tasks/current"), 'w') as f:
+            f.write(task_id)
+        with open(os.path.expanduser("~/.pomodoro_session"), 'w'):
+            pass
+    else:
+        try:
+            with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
+                current_task_id = f.read()
+                task = todo[current_task_id]
+                print(task['text'], task['id'])
+        except IOError as e:
+            print("A pomodoro is not currently in progress.")
+
