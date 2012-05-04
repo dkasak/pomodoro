@@ -13,6 +13,12 @@ def build_parser():
     parser.add_argument("task",
                         nargs="?",
                         help="task to start the pomodoro for", metavar="TASK")
+    parser.add_argument("--done",
+                        default=False, action="store_true",
+                        help="mark the current pomodoro as completed")
+    parser.add_argument("--resume",
+                        default=False, action="store_true",
+                        help="start another pomodoro with the previous task")
     return parser
 
 if __name__ == "__main__":
@@ -34,12 +40,29 @@ if __name__ == "__main__":
             f.write(task_id)
         with open(os.path.expanduser("~/.pomodoro_session"), 'w'):
             pass
+    elif args.done:
+        try:
+            with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
+                current_task_id = f.read()
+                task = todo[current_task_id]
+                task['marks'] = str(int(task.get('marks', 0)) + 1)
+                todo.tasks[current_task_id] = task
+                todo.write()
+        except IOError as e:
+            print("No task was previously started.")
+    elif args.resume:
+        try:
+            with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
+                with open(os.path.expanduser("~/.pomodoro_session"), 'w'):
+                    pass
+        except IOError as e:
+            print("A pomodoro is not currently in progress.")
     else:
         try:
             with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
-                print(task['text'], task['id'])
+                print(task['text'], task['id'], 'X' * int(task.get('marks', 0)))
         except IOError as e:
             print("A pomodoro is not currently in progress.")
 
