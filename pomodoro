@@ -52,7 +52,7 @@ if __name__ == "__main__":
             print("No task was previously started.")
     elif args.resume:
         try:
-            with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
+            with open(os.path.expanduser("~/docs/tasks/current"), 'r'):
                 with open(os.path.expanduser("~/.pomodoro_session"), 'w'):
                     pass
         except IOError as e:
