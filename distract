@@ -26,12 +26,12 @@ def build_parser():
                         dest="type",
                         default=Internal, const=Internal, action="store_const",
                         help="mark the distraction as internal (default)")
-    parser.add_argument("--fatal",
-                        default=False, action="store_true",
-                        help="mark the distraction as fatal")
     parser.add_argument("--urgent",
                         default=False, action="store_true",
                         help="mark the distraction as urgent")
+    parser.add_argument("--fatal",
+                        default=False, action="store_true",
+                        help="additionally stops the pomodoro")
     return parser
 
 if __name__ == "__main__":
@@ -52,9 +52,10 @@ if __name__ == "__main__":
     current_task_id = open(TASK_DIR + os.sep + "current").read()
     current_task = todo[current_task_id]
 
-    if args.fatal:
-        os.remove(home + os.sep + ".pomodoro_session")
-    elif args.urgent:
+    if args.urgent:
+        if args.fatal:
+            os.remove(home + os.sep + ".pomodoro_session")
+
         if args.type == Internal:
             todo.add_task(args.text)
             current_task['internal'] = str(int(current_task.get('internal', 0)) + 1)
