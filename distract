@@ -1,0 +1,80 @@
+#!/usr/bin/python
+import os
+import sys
+import argparse
+import datetime
+
+home = os.path.expanduser("~")
+sys.path.append(home + os.sep + "bin")
+import t
+
+class External(object):
+    pass
+
+class Internal(object):
+    pass
+
+def build_parser():
+    parser = argparse.ArgumentParser(description="Log a distraction.")
+    parser.add_argument("text",
+                        nargs="?",
+                        help="distraction description", metavar="TEXT")
+    parser.add_argument("--external",
+                        dest="type",
+                        default=Internal, const=External, action="store_const",
+                        help="mark the distraction as external")
+    parser.add_argument("--internal",
+                        dest="type",
+                        default=Internal, const=Internal, action="store_const",
+                        help="mark the distraction as internal (default)")
+    parser.add_argument("--fatal",
+                        default=False, action="store_true",
+                        help="mark the distraction as fatal")
+    parser.add_argument("--urgent",
+                        default=False, action="store_true",
+                        help="mark the distraction as urgent")
+    return parser
+
+if __name__ == "__main__":
+    TASK_DIR = os.path.expanduser("~/docs/tasks/")
+    INVENTORY_FILE = "tasks"
+    args = build_parser().parse_args()
+
+    today = datetime.date.today()
+    filename = "todo-{}".format(str(today))
+
+    todo = t.TaskDict(TASK_DIR, filename)
+    inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
+
+    if not os.path.exists(home + os.sep + ".pomodoro_session"):
+        print("No pomodoro is in progress.")
+        exit(1)
+
+    current_task_id = open(TASK_DIR + os.sep + "current").read()
+    current_task = todo[current_task_id]
+
+    if args.fatal:
+        os.remove(home + os.sep + ".pomodoro_session")
+    elif args.urgent:
+        if args.type == Internal:
+            todo.add_task(args.text)
+            current_task['internal'] = str(int(current_task.get('internal', 0)) + 1)
+            todo.tasks[current_task_id] = current_task
+        elif args.type == External:
+            todo.add_task(args.text)
+            current_task['external'] = str(int(current_task.get('external', 0)) + 1)
+            todo.tasks[current_task_id] = current_task
+        todo.write()
+    else:
+        if args.type == Internal:
+            inventory.add_task(args.text)
+            current_task['internal'] = str(int(current_task.get('internal', 0)) + 1)
+            todo.tasks[current_task_id] = current_task
+            todo.write()
+        elif args.type == External:
+            inventory.add_task(args.text)
+            current_task['external'] = str(int(current_task.get('external', 0)) + 1)
+            todo.tasks[current_task_id] = current_task
+            todo.write()
+        inventory.write()
+
