@@ -18,18 +18,18 @@ def build_parser():
     parser = argparse.ArgumentParser(description="Log a distraction.")
     parser.add_argument("text",
                         help="distraction description", metavar="TEXT")
-    parser.add_argument("--external",
+    parser.add_argument("-e", "--external",
                         dest="type",
                         default=Internal, const=External, action="store_const",
                         help="mark the distraction as external")
-    parser.add_argument("--internal",
+    parser.add_argument("-i", "--internal",
                         dest="type",
                         default=Internal, const=Internal, action="store_const",
                         help="mark the distraction as internal (default)")
-    parser.add_argument("--urgent",
+    parser.add_argument("-u", "--urgent",
                         default=False, action="store_true",
                         help="mark the distraction as urgent")
-    parser.add_argument("--fatal",
+    parser.add_argument("-f", "--fatal",
                         default=False, action="store_true",
                         help="additionally stops the pomodoro")
     return parser
