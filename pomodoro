@@ -19,6 +19,9 @@ def build_parser():
     parser.add_argument("--resume",
                         default=False, action="store_true",
                         help="start another pomodoro with the previous task")
+    parser.add_argument("--stop",
+                        default=False, action="store_true",
+                        help="stop the pomodoro")
     return parser
 
 if __name__ == "__main__":
@@ -57,6 +60,8 @@ if __name__ == "__main__":
                     pass
         except IOError as e:
             print("A pomodoro is not currently in progress.")
+    elif args.stop:
+        os.remove(home + os.sep + ".pomodoro_session")
     else:
         try:
             with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
