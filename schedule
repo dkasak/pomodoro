@@ -63,7 +63,8 @@ if __name__ == "__main__":
         for id in args.tasks:
             try:
                 task = inventory[id]
-                todo.add_task(task['text'])   
+                full_id = task['id']
+                todo[full_id] = task
             except t.AmbiguousPrefix as e:
                 print("Skipping '{}', ambiguous prefix in inventory.".format(e.prefix))
             except t.UnknownPrefix as e:
