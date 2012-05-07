@@ -44,6 +44,9 @@ if __name__ == "__main__":
 
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
 
+    if args.grep:
+        args.grep = args.grep[0]
+
     if args.remove:
         try:
             task_id = args.remove[0]
@@ -72,6 +75,6 @@ if __name__ == "__main__":
         inventory.write()
     else:
         kind = 'tasks' if not args.done else 'done'
-        inventory.print_list(kind=kind, verbose=args.verbose, quiet=args.quiet, grep=args.grep[0])
+        inventory.print_list(kind=kind, verbose=args.verbose, quiet=args.quiet, grep=args.grep)
 
 
