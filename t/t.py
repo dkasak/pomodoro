@@ -160,6 +160,35 @@ class TaskDict(object):
             else:
                 raise AmbiguousPrefix(prefix)
 
+    def __setitem__(self, prefix, task):
+        """Replace the task with the given prefix with an updated task.
+
+        Since changing the task text would change the task id, text will not 
+        be updated. The purpose of this method is to enable updating the task 
+        metadata.
+
+        If more than one task matches the prefix an AmbiguousPrefix exception
+        will be raised, unless the prefix is the entire ID of one task.
+
+        If no tasks match the prefix an UnknownPrefix exception will be raised.
+
+        """
+        matched = [tid for tid in self.tasks.keys() if tid.startswith(prefix)]
+        if len(matched) == 1:
+            for key, value in task.items():
+                if key != "text" and key != "id":
+                    self.tasks[matched[0]][key] = value
+        elif len(matched) == 0:
+            raise UnknownPrefix(prefix)
+        else:
+            matched = [tid for tid in self.tasks.keys() if tid == prefix]
+            if len(matched) == 1:
+                for key, value in task.items():
+                    if key != "text" and key != "id":
+                        self.tasks[matched[0]][key] = value
+            else:
+                raise AmbiguousPrefix(prefix)
+
     def add_task(self, text):
         """Add a new, unfinished task with the given summary text."""
         task_id = _hash(text)
