@@ -67,5 +67,5 @@ if __name__ == "__main__":
                 print("Skipping '{}', no such task in inventory.".format(e.prefix))
         todo.write()
     else:
-        todo.print_list(verbose=args.verbose, quiet=args.quiet, grep=args.grep)
+        todo.print_list(verbose=args.verbose, quiet=args.quiet, grep=args.grep[0])
 

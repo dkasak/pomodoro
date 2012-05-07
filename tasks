@@ -72,6 +72,6 @@ if __name__ == "__main__":
         inventory.write()
     else:
         kind = 'tasks' if not args.done else 'done'
-        inventory.print_list(kind=kind, verbose=args.verbose, quiet=args.quiet, grep=args.grep)
+        inventory.print_list(kind=kind, verbose=args.verbose, quiet=args.quiet, grep=args.grep[0])
 
 
