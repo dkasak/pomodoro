@@ -26,12 +26,14 @@ def build_parser():
 
 if __name__ == "__main__":
     TASK_DIR = os.path.expanduser("~/docs/tasks/")
+    INVENTORY_FILE = "tasks"
     args = build_parser().parse_args()
 
     today = datetime.date.today()
     filename = "todo-{}".format(str(today))
 
     todo = t.TaskDict(TASK_DIR, filename)
+    inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
 
     if args.task:
         if len(todo.tasks) == 0:
