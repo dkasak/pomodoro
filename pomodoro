@@ -50,7 +50,9 @@ if __name__ == "__main__":
                 task = todo[current_task_id]
                 task['marks'] = str(int(task.get('marks', 0)) + 1)
                 todo.tasks[current_task_id] = task
+                inventory.tasks[current_task_id] = task
                 todo.write()
+                inventory.write()
         except IOError as e:
             print("No task was previously started.")
     elif args.resume:
