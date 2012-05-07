@@ -17,7 +17,6 @@ class Internal(object):
 def build_parser():
     parser = argparse.ArgumentParser(description="Log a distraction.")
     parser.add_argument("text",
-                        nargs="?",
                         help="distraction description", metavar="TEXT")
     parser.add_argument("--external",
                         dest="type",
