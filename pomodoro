@@ -62,7 +62,10 @@ if __name__ == "__main__":
             with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
-                print(task['text'], task['id'], 'X' * int(task.get('marks', 0)))
+                print(task['text'], task['id']) 
+                print("Marks: {}".format('X' * int(task.get('marks', 0))))
+                print("Internal: {}".format('\'' * int(task.get('internal', 0))))
+                print("External: {}".format('-' * int(task.get('external', 0))))
         except IOError as e:
             print("A pomodoro is not currently in progress.")
 
