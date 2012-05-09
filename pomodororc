@@ -1,0 +1,22 @@
+# Pomodoro configuration file 
+# ===========================
+# Uncomment the lines that you want to use
+# Place the file in the home dir as .pomodororc
+#
+# Directory containing session information
+# SESSION_DIR=~
+#
+# File to indicate a session is in progress 
+# SESSION_FILE=.pomodoro_session
+#
+# Directory containing tasks
+# TASK_DIR=~/docs/tasks/
+#
+# File to be used as task inventory
+# INVENTORY_FILE=tasks
+#
+# Prefix for daily schedule files (todo lists)
+# SCHEDULE_FILE_PREFIX=todo
+#
+# File where the currently worked upon task ID will be stored
+# CURRENT_TASK_FILE=current
