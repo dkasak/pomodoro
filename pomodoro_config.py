@@ -1,6 +1,7 @@
-import os
 import sys
+import os
 from os import sep
+from os.path import join
 from os.path import expanduser as expand
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,8 +27,6 @@ try:
             # expand user directories in paths
             if "DIR" in setting:
                 value = expand(value)
-                if not value.endswith('/'):
-                    value += '/'
             user_settings[setting] = value
             settings.update(user_settings)
 except IOError:

@@ -2,6 +2,8 @@
 import argparse
 import datetime
 import os
+from os.path import join
+
 
 from pomodoro_config import *
 import t
@@ -33,7 +35,7 @@ if __name__ == "__main__":
 
     today = datetime.date.today()
     filename = "{}-{}".format(SCHEDULE_FILE_PREFIX, str(today))
-    path = TASK_DIR + filename
+    path = join(TASK_DIR, filename)
 
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
     todo = t.TaskDict(TASK_DIR, filename)

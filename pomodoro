@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import os
+from os.path import join
 import argparse
 import datetime
 
@@ -37,13 +38,13 @@ if __name__ == "__main__":
             exit(0)
 
         task_id = todo[args.task]['id']
-        with open(TASK_DIR + CURRENT_TASK_FILE, 'w') as f:
+        with open(join(TASK_DIR, CURRENT_TASK_FILE), 'w') as f:
             f.write(task_id)
-        with open(SESSION_DIR + SESSION_FILE, 'w'):
+        with open(join(SESSION_DIR, SESSION_FILE), 'w'):
             pass
     elif args.done:
         try:
-            with open(TASK_DIR + CURRENT_TASK_FILE, 'r') as f:
+            with open(join(TASK_DIR, CURRENT_TASK_FILE), 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
                 task['marks'] = str(int(task.get('marks', 0)) + 1)
@@ -61,10 +62,10 @@ if __name__ == "__main__":
         except IOError as e:
             print("A pomodoro is not currently in progress.")
     elif args.stop:
-        os.remove(SESSION_DIR + SESSION_FILE)
+        os.remove(join(SESSION_DIR, SESSION_FILE))
     else:
         try:
-            with open(TASK_DIR + CURRENT_TASK_FILE, 'r') as f:
+            with open(join(TASK_DIR, CURRENT_TASK_FILE), 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
                 print(task['text'], task['id']) 
