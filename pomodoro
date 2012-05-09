@@ -38,13 +38,13 @@ if __name__ == "__main__":
             exit(0)
 
         task_id = todo[args.task]['id']
-        with open(join(TASK_DIR, CURRENT_TASK_FILE), 'w') as f:
+        with open(join(SESSION_DIR, CURRENT_TASK_FILE), 'w') as f:
             f.write(task_id)
         with open(join(SESSION_DIR, SESSION_FILE), 'w'):
             pass
     elif args.done:
         try:
-            with open(join(TASK_DIR, CURRENT_TASK_FILE), 'r') as f:
+            with open(join(SESSION_DIR, CURRENT_TASK_FILE), 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
                 task['marks'] = str(int(task.get('marks', 0)) + 1)
@@ -56,7 +56,7 @@ if __name__ == "__main__":
             print("No task was previously started.")
     elif args.resume:
         try:
-            with open(TASK_DIR + CURRENT_TASK_FILE, 'r'):
+            with open(join(SESSION_FILE, CURRENT_TASK_FILE), 'r'):
                 with open(SESSION_DIR + SESSION_FILE, 'w'):
                     pass
         except IOError as e:
@@ -65,7 +65,7 @@ if __name__ == "__main__":
         os.remove(join(SESSION_DIR, SESSION_FILE))
     else:
         try:
-            with open(join(TASK_DIR, CURRENT_TASK_FILE), 'r') as f:
+            with open(join(SESSION_DIR, CURRENT_TASK_FILE), 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
                 print(task['text'], task['id']) 

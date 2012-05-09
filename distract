@@ -46,7 +46,7 @@ if __name__ == "__main__":
         print("No pomodoro is in progress.")
         exit(1)
 
-    current_task_id = open(join(TASK_DIR, CURRENT_TASK_FILE)).read()
+    current_task_id = open(join(SESSION_DIR, CURRENT_TASK_FILE)).read()
     current_task = todo[current_task_id]
 
     if args.urgent:
