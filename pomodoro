@@ -56,8 +56,8 @@ if __name__ == "__main__":
             print("No task was previously started.")
     elif args.resume:
         try:
-            with open(join(SESSION_FILE, CURRENT_TASK_FILE), 'r'):
-                with open(SESSION_DIR + SESSION_FILE, 'w'):
+            with open(join(SESSION_DIR, CURRENT_TASK_FILE), 'r'):
+                with open(join(SESSION_DIR, SESSION_FILE), 'w'):
                     pass
         except IOError as e:
             print("A pomodoro is not currently in progress.")
