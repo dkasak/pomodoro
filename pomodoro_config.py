@@ -1,5 +1,11 @@
+import os
+import sys
 from os import sep
 from os.path import expanduser as expand
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+t_dir = os.path.join(script_dir, "t")
+sys.path.append(t_dir)
 
 settings = {}
 settings["SESSION_FILE"] = ".pomodoro_session"

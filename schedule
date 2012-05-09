@@ -2,12 +2,9 @@
 import argparse
 import datetime
 import os
-import sys
 
-home = os.path.expanduser("~")
-sys.path.append(home + os.sep + "bin")
-import t
 from pomodoro_config import *
+import t
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Schedule task(s) for today from the activity inventory.")

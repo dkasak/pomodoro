@@ -1,13 +1,10 @@
 #!/usr/bin/python
 import os
-import sys
 import argparse
 import datetime
 
-home = os.path.expanduser("~")
-sys.path.append(home + os.sep + "bin")
-import t
 from pomodoro_config import *
+import t
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Control the pomodoro.")

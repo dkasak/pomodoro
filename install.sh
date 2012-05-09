@@ -1,5 +1,5 @@
 #!/bin/bash
-binaries=(pomodoro distract schedule tasks recreate_tasklist t/t.py)
+binaries=(pomodoro distract schedule tasks recreate_tasklist)
 code_dir=~/code/pomodoro
 
 for file in ${binaries[@]}
