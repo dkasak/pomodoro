@@ -21,6 +21,9 @@ try:
     with open(expand("~/.pomodororc"), "r") as f:
         user_settings = {}
         for line in f:
+            # skip comments
+            if line.strip().startswith('#'):
+                continue
             setting, value = line.split('=')
             setting = setting.strip()
             value = value.strip()
