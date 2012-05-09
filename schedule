@@ -63,6 +63,9 @@ if __name__ == "__main__":
             try:
                 task = inventory[id]
                 full_id = task['id']
+                # if the task doesn't exist, first create it
+                if full_id not in todo.tasks.keys():
+                    todo.add_task(task['text'])
                 todo[full_id] = task
             except t.AmbiguousPrefix as e:
                 print("Skipping '{}', ambiguous prefix in inventory.".format(e.prefix))
