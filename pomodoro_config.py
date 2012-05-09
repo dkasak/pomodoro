@@ -30,6 +30,11 @@ try:
             # expand user directories in paths
             if "DIR" in setting:
                 value = expand(value)
+                # create directories that don't exist
+                try:
+                    os.makedirs(value)
+                except OSError:
+                    pass
             user_settings[setting] = value
             settings.update(user_settings)
 except IOError:
