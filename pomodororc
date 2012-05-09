@@ -4,13 +4,13 @@
 # Place the file in the home dir as .pomodororc
 #
 # Directory containing session information
-# SESSION_DIR=~
+# SESSION_DIR=~/.pomodoro/
 #
 # (SESSION_DIR) File where the currently worked upon task ID will be stored
 # CURRENT_TASK_FILE=current
 #
 # (SESSION_DIR) File to indicate a session is in progress 
-# SESSION_FILE=.pomodoro_session
+# SESSION_FILE=pomodoro_session
 #
 # Directory containing tasks
 # TASK_DIR=~/docs/tasks/
