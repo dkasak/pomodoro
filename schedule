@@ -7,6 +7,7 @@ import sys
 home = os.path.expanduser("~")
 sys.path.append(home + os.sep + "bin")
 import t
+from pomodoro_config import *
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Schedule task(s) for today from the activity inventory.")
@@ -31,13 +32,11 @@ def build_parser():
     return parser
 
 if __name__ == "__main__":
-    TASK_DIR = os.path.expanduser("~/docs/tasks/")
-    INVENTORY_FILE = "tasks"
     args = build_parser().parse_args()
 
     today = datetime.date.today()
-    filename = "todo-{}".format(str(today))
-    path = os.path.expanduser(TASK_DIR + filename)
+    filename = "{}-{}".format(SCHEDULE_FILE_PREFIX, str(today))
+    path = TASK_DIR + filename
 
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
     todo = t.TaskDict(TASK_DIR, filename)

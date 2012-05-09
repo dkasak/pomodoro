@@ -7,6 +7,7 @@ import argparse
 home = os.path.expanduser("~")
 sys.path.append(home + os.sep + "bin")
 import t
+from pomodoro_config import *
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Manage activity inventory.")
@@ -38,8 +39,6 @@ def build_parser():
     return parser
 
 if __name__ == "__main__":
-    TASK_DIR = os.path.expanduser("~/docs/tasks/")
-    INVENTORY_FILE = "tasks"
     args = build_parser().parse_args()
 
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)

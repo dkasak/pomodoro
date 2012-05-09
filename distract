@@ -7,6 +7,7 @@ import datetime
 home = os.path.expanduser("~")
 sys.path.append(home + os.sep + "bin")
 import t
+from pomodoro_config import *
 
 class External(object):
     pass
@@ -35,26 +36,24 @@ def build_parser():
     return parser
 
 if __name__ == "__main__":
-    TASK_DIR = os.path.expanduser("~/docs/tasks/")
-    INVENTORY_FILE = "tasks"
     args = build_parser().parse_args()
 
     today = datetime.date.today()
-    filename = "todo-{}".format(str(today))
+    filename = "{}-{}".format(SCHEDULE_FILE_PREFIX, str(today))
 
     todo = t.TaskDict(TASK_DIR, filename)
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
 
-    if not os.path.exists(home + os.sep + ".pomodoro_session"):
+    if not os.path.exists(SESSION_DIR + SESSION_FILE):
         print("No pomodoro is in progress.")
         exit(1)
 
-    current_task_id = open(TASK_DIR + os.sep + "current").read()
+    current_task_id = open(TASK_DIR + CURRENT_TASK_FILE).read()
     current_task = todo[current_task_id]
 
     if args.urgent:
         if args.fatal:
-            os.remove(home + os.sep + ".pomodoro_session")
+            os.remove(SESSION_DIR + SESSION_FILE)
 
         if args.type == Internal:
             todo.add_task(args.text)

@@ -7,6 +7,7 @@ import datetime
 home = os.path.expanduser("~")
 sys.path.append(home + os.sep + "bin")
 import t
+from pomodoro_config import *
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Control the pomodoro.")
@@ -25,12 +26,10 @@ def build_parser():
     return parser
 
 if __name__ == "__main__":
-    TASK_DIR = os.path.expanduser("~/docs/tasks/")
-    INVENTORY_FILE = "tasks"
     args = build_parser().parse_args()
 
     today = datetime.date.today()
-    filename = "todo-{}".format(str(today))
+    filename = "{}-{}".format(SCHEDULE_FILE_PREFIX, str(today))
 
     todo = t.TaskDict(TASK_DIR, filename)
     inventory = t.TaskDict(TASK_DIR, INVENTORY_FILE)
@@ -41,13 +40,13 @@ if __name__ == "__main__":
             exit(0)
 
         task_id = todo[args.task]['id']
-        with open(os.path.expanduser("~/docs/tasks/current"), 'w') as f:
+        with open(TASK_DIR + CURRENT_TASK_FILE, 'w') as f:
             f.write(task_id)
-        with open(os.path.expanduser("~/.pomodoro_session"), 'w'):
+        with open(SESSION_DIR + SESSION_FILE, 'w'):
             pass
     elif args.done:
         try:
-            with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
+            with open(TASK_DIR + CURRENT_TASK_FILE, 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
                 task['marks'] = str(int(task.get('marks', 0)) + 1)
@@ -59,16 +58,16 @@ if __name__ == "__main__":
             print("No task was previously started.")
     elif args.resume:
         try:
-            with open(os.path.expanduser("~/docs/tasks/current"), 'r'):
-                with open(os.path.expanduser("~/.pomodoro_session"), 'w'):
+            with open(TASK_DIR + CURRENT_TASK_FILE, 'r'):
+                with open(SESSION_DIR + SESSION_FILE, 'w'):
                     pass
         except IOError as e:
             print("A pomodoro is not currently in progress.")
     elif args.stop:
-        os.remove(home + os.sep + ".pomodoro_session")
+        os.remove(SESSION_DIR + SESSION_FILE)
     else:
         try:
-            with open(os.path.expanduser("~/docs/tasks/current"), 'r') as f:
+            with open(TASK_DIR + CURRENT_TASK_FILE, 'r') as f:
                 current_task_id = f.read()
                 task = todo[current_task_id]
                 print(task['text'], task['id']) 
