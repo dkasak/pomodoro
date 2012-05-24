@@ -21,6 +21,9 @@ def build_parser():
     parser.add_argument("--stop",
                         default=False, action="store_true",
                         help="stop the pomodoro")
+    parser.add_argument("--final",
+                        default=False, action="store_true",
+                        help="mark the current task as finished")
     return parser
 
 if __name__ == "__main__":
@@ -74,4 +77,17 @@ if __name__ == "__main__":
                 print("External: {}".format('-' * int(task.get('external', 0))))
         except IOError as e:
             print("A pomodoro is not currently in progress.")
+
+    if args.final:
+        try:
+            with open(join(SESSION_DIR, CURRENT_TASK_FILE), 'r') as f:
+                current_task_id = f.read()
+                todo.finish_task(current_task_id)
+                inventory.finish_task(current_task_id)
+                todo.write()
+                inventory.write()
+            os.remove(join(SESSION_DIR, CURRENT_TASK_FILE))
+        except IOError as e:
+            print("No task was previously started.")
+        
 
